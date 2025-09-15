@@ -7919,7 +7919,7 @@
 				)
 			)
 		)
-		(property "Value" "33p"
+		(property "Value" "30p"
 			(at 58.42 69.85 90)
 			(effects
 				(font
@@ -8963,7 +8963,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 56.642 94.488 0)
+			(at 58.674 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9574,7 +9574,7 @@
 				)
 			)
 		)
-		(property "Value" "33p"
+		(property "Value" "30p"
 			(at 55.372 79.502 90)
 			(effects
 				(font
