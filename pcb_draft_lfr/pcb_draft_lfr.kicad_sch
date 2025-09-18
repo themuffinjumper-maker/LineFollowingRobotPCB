@@ -3515,23 +3515,23 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "S"
-				(at -3.81 8.255 0)
+			(property "Reference" "S3"
+				(at 1.016 16.256 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "JS202011SCQN"
-				(at 0 -11.43 0)
+			(property "Value" "SPI On/Off Switch"
+				(at 0.762 12.7 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Footprint" "digikey-footprints:Switch_Slide_JS202011SCQN"
+			(property "Footprint" "footprints:SWITCH_011CQN"
 				(at 5.08 5.08 0)
 				(effects
 					(font
@@ -3942,7 +3942,7 @@
 							)
 						)
 					)
-					(number "4"
+					(number "6"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3960,7 +3960,7 @@
 							)
 						)
 					)
-					(number "6"
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
