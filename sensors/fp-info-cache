@@ -1,4 +1,4 @@
-26424485413367653
+26426244245997951
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -73030,6 +73030,13 @@ threaded screw
 0
 4
 1
+N6L50T0C-103-3030
+N6L50T0C1033030
+N6L50T0C-103-3030-4
+Variable Resistor
+0
+3
+3
 NetTie
 NetTie-2_SMD_Pad0.5mm
 Net tie, 2 pin, 0.5mm square SMD pads
@@ -98552,6 +98559,13 @@ Logo WEEE
 0
 0
 0
+TCRT5000
+OPTO_TCRT5000
+
+
+0
+4
+4
 TerminalBlock
 TerminalBlock_Altech_AK300-2_P5.00mm
 Altech AK300 terminal block, pitch 5.0mm, 45 degree angled, see http://www.mouser.com/ds/2/16/PCBMETRC-24178.pdf
@@ -105601,10 +105615,3 @@ Varistor VF
 0
 2
 2
-footprints
-TCRT5000_VIS
-
-TCRT5000 
-0
-6
-6

@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP N6L50T0C-103-3030
+D Trimmer Resistors - Through Hole 10K ohm 5.0mm 30% Carbon Pot
+K
+F https://www.mouser.es/datasheet/2/18/09-N6v03-1499128.pdf
+$ENDCMP
+#
+#End Doc Library
