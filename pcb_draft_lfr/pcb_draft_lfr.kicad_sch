@@ -4498,7 +4498,7 @@
 		)
 		(uuid "748e1c6b-5224-4c4d-b330-86fd33d61b4e")
 	)
-	(text "Serial Port Input (SPI)"
+	(text "Serial Port Interface (SPI)"
 		(exclude_from_sim no)
 		(at 30.48 23.622 0)
 		(effects
@@ -4950,7 +4950,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2a73d95d-abe0-4596-b3ea-2d240cd28136")
+		(uuid "29fba00c-fca6-4e2c-9981-374fe741bd7d")
 	)
 	(wire
 		(pts
@@ -5824,16 +5824,6 @@
 	)
 	(wire
 		(pts
-			(xy 250.19 118.11) (xy 250.19 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "db1bbcb3-117f-4011-a53d-910837b03a2f")
-	)
-	(wire
-		(pts
 			(xy 100.33 181.61) (xy 100.33 185.42)
 		)
 		(stroke
@@ -5971,6 +5961,16 @@
 			(type default)
 		)
 		(uuid "ef9c8243-aee1-4d66-bbfb-88772f92cf48")
+	)
+	(wire
+		(pts
+			(xy 250.19 118.11) (xy 250.19 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f326d259-45a4-49ba-93f9-3c57582335ff")
 	)
 	(wire
 		(pts
@@ -7354,7 +7354,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x02_Pin"
+		(property "Value" "Conn_Battery"
 			(at 218.44 126.3649 90)
 			(effects
 				(font
@@ -7423,7 +7423,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x04_Pin"
+		(property "Value" "Conn_Debug"
 			(at 152.908 94.488 0)
 			(effects
 				(font
@@ -7488,7 +7488,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "124d7940-fb20-4d84-b5f3-084290f20f77")
 		(property "Reference" "J7"
 			(at 256.54 115.5699 0)
@@ -7499,7 +7498,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x02_Pin"
+		(property "Value" "Conn_Motor_2"
 			(at 256.54 118.1099 0)
 			(effects
 				(font
@@ -7567,7 +7566,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
+		(property "Value" "Conn_Sens_3"
 			(at 116.078 166.37 0)
 			(effects
 				(font
@@ -8076,7 +8075,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
+		(property "Value" "Conn_Sens_1"
 			(at 80.518 169.164 0)
 			(effects
 				(font
@@ -8896,7 +8895,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x02_Pin"
+		(property "Value" "Conn_Motor_1"
 			(at 256.54 138.4299 0)
 			(effects
 				(font
@@ -9245,7 +9244,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "TestPoint_Vbattery"
 			(at 255.27 124.4599 90)
 			(effects
 				(font
@@ -9626,7 +9625,6 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "87889407-a869-4aaf-82c4-4b1938988a01")
 		(property "Reference" "TP3"
 			(at 212.09 25.9079 0)
@@ -9637,8 +9635,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 212.09 28.4479 0)
+		(property "Value" "TestPoint_Vcc"
+			(at 212.09 27.686 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9702,8 +9700,8 @@
 				)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 195.326 124.714 90)
+		(property "Value" "TestPoint_GND"
+			(at 193.802 124.46 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10206,7 +10204,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
+		(property "Value" "Conn_Sens_4"
 			(at 133.858 168.91 0)
 			(effects
 				(font
@@ -10411,7 +10409,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
+		(property "Value" "Conn_Sens_5"
 			(at 151.638 168.91 0)
 			(effects
 				(font
@@ -12190,7 +12188,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
+		(property "Value" "Conn_Sens_2"
 			(at 98.806 169.164 0)
 			(effects
 				(font
