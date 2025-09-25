@@ -80,11 +80,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-<<<<<<< HEAD
-			(outputdirectory "Gerbers/")
-=======
 			(outputdirectory "gerbers")
->>>>>>> 82acfc37c994e957083431458a7049944121f196
 		)
 	)
 	(net 0 "")
