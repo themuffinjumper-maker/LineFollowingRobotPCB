@@ -4,48 +4,113 @@
 #define SENSOR_4_PIN A3
 #define SENSOR_5_PIN A4
 
+#define SENSOR_THRESHOLD 10
+
 #define MOTOR_1_PIN 5
 #define MOTOR_2_PIN 6
 
-void setup() {
-  // put your setup code here, to run once:
-  pinMode(SENSOR_1_PIN, INPUT);
-  pinMode(SENSOR_2_PIN, INPUT);
-  pinMode(SENSOR_3_PIN, INPUT);
-  pinMode(SENSOR_4_PIN, INPUT);
-  pinMode(SENSOR_5_PIN, INPUT);
+#define MOTOR_MAX (256 * 3 / 4) // 75%
+#define MOTOR_MIN_OUTER (256 * 2 / 4) // 50%
+#define MOTOR_MIN_INNER (256 * 1 / 4) // 25%
 
-  pinMode(MOTOR_1_PIN, OUTPUT);
-  pinMode(MOTOR_2_PIN, OUTPUT);
+// The output from the PID may not exceed this in either direction.
+#define PID_CLAMP 256
+int clamp(int v, int low, int high) {
+  if (v < low) return low;
+  if (v > high) return high;
+  return v;
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
 
-}
+class MotorOutput {
+  public:
+    int left, right;
+    int const leftPin, rightPin;
+
+    // -ve => left, +ve => right
+    // This should be the output from the PIDController?
+    void update(int u) {
+      // Use 75-75 to go straight, and 50-25 at max turn.
+      bool direction = u < 0;
+      int uAbs = direction ? -u : u;
+      
+      // Scale both the inner and outer speeds by different amounts.
+      int inner = (uAbs * (MOTOR_MAX - MOTOR_MIN_INNER) + MOTOR_MIN_INNER) / PID_CLAMP;
+      int outer = (uAbs * (MOTOR_MAX - MOTOR_MIN_OUTER) + MOTOR_MIN_OUTER) / PID_CLAMP;
+      if (direction) {
+        left = inner;
+        right = outer;
+      } else {
+        left = outer;
+        right = inner;
+      }
+
+      analogWrite(leftPin, left);
+      analogWrite(rightPin, right);
+    }
+
+    MotorOutput(int leftPinNo, int rightPinNo): leftPin(leftPinNo), rightPin(rightPinNo) {}
+
+    void init() {
+      pinMode(leftPin, OUTPUT);
+      pinMode(rightPin, OUTPUT);
+    }
+
+};
+
+// Handles the input from the sensors.
+class SensorInput {
+  public:
+
+    // limitLeft, left, centre, right, limitRight
+    bool activePins[5];
+    int pinNumbers[5];
+
+    SensorInput(int pins[5]): activePins{0, 0, 0, 0, 0} {
+      for (int i = 0; i < 5; i++) {
+        activePins[i] = pins[i];
+      }
+    }
+
+    void init() {
+      for (int pin: activePins) {
+        pinMode(pin, INPUT);
+      }
+    }
+
+    void update() {
+      for (int i = 0; i < 5; i++) { 
+        int analogState = analogRead(pinNumbers[i]);
+        activePins[i] = analogState >= SENSOR_THRESHOLD;
+      }
+    }
+};
 
 class PIDController {
-  uint64_t integral;
-  uint64_t prevErr;
+  private:
+    int integral;
+    int prevErr;
 
   public:
-    uint64_t kProp;
-    uint64_t kInteg;
-    uint64_t kDeriv;
+    PIDController(int initProp, int initInteg, int initDeriv): 
+      kProp(initProp), kDeriv(initDeriv), kInteg(initInteg) {}
+
+    int kProp, kInteg, kDeriv;
 
     // Step the controller through one time unit.
-    uint64_t step(uint64_t err) {
-      uint64_t uProp = -kProp * err;
+    int step(int err) {
+      int uProp = -kProp * err;
 
-      uint64_t uInteg = -kInteg * integral;
+      int uInteg = -kInteg * integral;
       integral += err;
 
-      uint64_t uDeriv = -kDeriv * (err - prevErr);
+      int uDeriv = -kDeriv * (err - prevErr);
       prevErr = err;
 
-      return uProp + uDeriv + uInteg;
+      int out = uProp + uDeriv + uInteg;
+      return clamp(out, -PID_CLAMP, PID_CLAMP);
     }
-}
+};
 
 typedef enum {
   // Only the middle sensor is active.
@@ -68,20 +133,30 @@ typedef enum {
 
 class SensorStates {
   public:
-    bool limitLeft;
-    bool left;
-    bool centre;
-    bool right;
-    bool limitRight;
+    SensorStates(): currPos(NEUTRAL) {}
 
     LinePosition currPos;
-    LinePosition step() {
-      currPos = nextLinePosition();
+
+    // Updates the line position.
+    LinePosition step(SensorInput &input) {
+      currPos = nextLinePosition(
+        input.activePins[0],
+        input.activePins[1],
+        input.activePins[2],
+        input.activePins[3],
+        input.activePins[4]
+      );
       return currPos;
     }
 
   private:
-    LinePosition nextLinePosition() {
+    LinePosition nextLinePosition(
+      bool limitLeft, 
+      bool left, 
+      bool centre,
+      bool right, 
+      bool limitRight
+    ) {
       // I'm not proud of this.
       switch (currPos) {
         case NEUTRAL:
@@ -122,4 +197,23 @@ class SensorStates {
           break;
       }
     }
+};
+
+// SensorInput input;
+MotorOutput output(5, 6);
+// SensorStates state;
+PIDController controller(0, 0, 0);
+
+void setup() {
+  output.init();
+  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  // TODO: Use the PID
+  // input.update();
+  // state.step(input);
+  output.update(0);
 }
