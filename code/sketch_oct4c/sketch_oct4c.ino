@@ -1,17 +1,9 @@
-#define SENSOR_1_PIN A0
-#define SENSOR_2_PIN A1
-#define SENSOR_3_PIN A2
-#define SENSOR_4_PIN A3
-#define SENSOR_5_PIN A4
 
 #define SENSOR_THRESHOLD 10
 
-#define MOTOR_1_PIN 5
-#define MOTOR_2_PIN 6
-
 #define MOTOR_MAX (256 * 3 / 4) // 75%
-#define MOTOR_MIN_OUTER (256 * 2 / 4) // 50%
-#define MOTOR_MIN_INNER (256 * 1 / 4) // 25%
+#define MOTOR_MIN_OUTER (MOTOR_MAX * 2 / 3) // 50%
+#define MOTOR_MIN_INNER (MOTOR_MAX * 1 / 3) // 25%
 
 // The output from the PID may not exceed this in either direction.
 #define PID_CLAMP 256
@@ -35,8 +27,8 @@ class MotorOutput {
       int uAbs = direction ? -u : u;
       
       // Scale both the inner and outer speeds by different amounts.
-      int inner = (uAbs * (MOTOR_MAX - MOTOR_MIN_INNER) + MOTOR_MIN_INNER) / PID_CLAMP;
-      int outer = (uAbs * (MOTOR_MAX - MOTOR_MIN_OUTER) + MOTOR_MIN_OUTER) / PID_CLAMP;
+      int inner = MOTOR_MAX - (MOTOR_MIN_INNER * uAbs) / PID_CLAMP;
+      int outer = MOTOR_MAX - (MOTOR_MIN_OUTER * uAbs) / PID_CLAMP;
       if (direction) {
         left = inner;
         right = outer;
@@ -199,21 +191,21 @@ class SensorStates {
     }
 };
 
-// SensorInput input;
+SensorInput input([A4, A3, A2, A1, A0]);
 MotorOutput output(5, 6);
-// SensorStates state;
+SensorStates state();
 PIDController controller(0, 0, 0);
 
 void setup() {
   output.init();
-  
+  input.init();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
   // TODO: Use the PID
-  // input.update();
-  // state.step(input);
+  input.update();
+  state.step(input);
   output.update(0);
 }
