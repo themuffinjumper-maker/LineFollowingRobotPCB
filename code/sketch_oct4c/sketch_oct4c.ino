@@ -85,7 +85,7 @@ class PIDController {
 
   public:
     PIDController(int initProp, int initInteg, int initDeriv): 
-      kProp(initProp), kDeriv(initDeriv), kInteg(initInteg) {}
+      kProp(initProp), kDeriv(initDeriv), kInteg(initInteg), integral(0), prevErr(0) {}
 
     int kProp, kInteg, kDeriv;
 
@@ -105,22 +105,11 @@ class PIDController {
 };
 
 typedef enum {
-  // Only the middle sensor is active.
-  NEUTRAL = 0,
-  // The middle and right sensors are active.
-  NEAR_RIGHT,
-  // Only the right sensor is active.
-  MID_RIGHT,
-  // The right sensor was the previous active sensor.
+  FAR_LEFT = -2,
+  LEFT,
+  NEUTRAL,
+  RIGHT,
   FAR_RIGHT,
-  // The right limit sensor has been tripped.
-  LIMIT_RIGHT,
-  // FAULT_RIGHT,
-  // FAULT_LEFT = -5,
-  LIMIT_LEFT = -4,
-  FAR_LEFT,
-  MID_LEFT,
-  NEAR_LEFT
 } LinePosition;
 
 class SensorStates {
@@ -149,56 +138,46 @@ class SensorStates {
       bool right, 
       bool limitRight
     ) {
-      // I'm not proud of this.
       switch (currPos) {
+        case FAR_LEFT:
+          if (limitLeft) break;
+          if (left) return LEFT;
+          break;
+        case LEFT:
+          if (left) break;
+          if (limitLeft) return FAR_LEFT;
+          if (centre) return NEUTRAL;
+          break;
         case NEUTRAL:
-          if (left && !right) return NEAR_LEFT;
-          if (right && !left) return NEAR_RIGHT;
+          if (centre) break;
+          if (left) return LEFT;
+          if (right) return RIGHT;
           break;
-          
-        case NEAR_RIGHT:
-          if ((centre || left) && !right) return NEUTRAL;
-          if (!(centre || left)) return MID_RIGHT;
-          break;
-        case MID_RIGHT:
-          if (!(centre || left || right)) return FAR_RIGHT;
-          if (!right) return NEAR_RIGHT;
+        case RIGHT:
+          if (right) break;
+          if (centre) return NEUTRAL;
+          if (limitRight) return FAR_RIGHT;
           break;
         case FAR_RIGHT:
-          if (centre || left || right) return MID_RIGHT;
-          if (limitRight) return LIMIT_RIGHT;
-          break;
-        case LIMIT_RIGHT:
-          if (centre || left || right) return MID_RIGHT;
-          break;
-
-        case NEAR_LEFT:
-          if ((centre || right) && !left) return NEUTRAL;
-          if (!(centre || right)) return MID_LEFT;
-          break;
-        case MID_LEFT:
-          if (!(centre || right || left)) return FAR_LEFT;
-          if (!left) return NEAR_LEFT;
-          break;
-        case FAR_LEFT:
-          if (centre || right || left) return MID_LEFT;
-          if (limitLeft) return LIMIT_LEFT;
-          break;
-        case LIMIT_LEFT:
-          if (centre || right || left) return MID_LEFT;
+          if (limitRight) break;
+          if (right) return RIGHT;
           break;
       }
+      return currPos;
     }
 };
 
-SensorInput input([A4, A3, A2, A1, A0]);
+const int INPUT_PINS[5] = {A4, A3, A2, A1, A0};
+
+SensorInput input(INPUT_PINS);
 MotorOutput output(5, 6);
-SensorStates state();
+SensorStates state;
 PIDController controller(0, 0, 0);
 
 void setup() {
   output.init();
   input.init();
+  state = SensorStates();
 }
 
 void loop() {
